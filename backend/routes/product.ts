@@ -25,7 +25,7 @@ router.get('/product/:id', validate({//return specific product by id
   }), async (req: Request, res: Response) => {
     try {
         const [rows,fields] = await promisePool.query('SELECT * FROM product WHERE id = ?', req.params.id);
-        res.send(rows);        
+        res.send(rows[0]);
     } catch (error) {
         res.status(500)
         res.send({Error: 500})

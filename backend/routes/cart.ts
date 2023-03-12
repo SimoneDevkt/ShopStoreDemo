@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/cart', async (req: Request, res: Response) => {//get cart for a specific user
     try {
-        const [rows,fields] = await promisePool.query('SELECT * FROM cart WHERE user_id = ?', req.body.userId);
+        const [rows,fields] = await promisePool.query('SELECT product_id, quantity FROM cart WHERE user_id = ?', req.body.userId);
         res.send(rows);
     } catch (error) {
         res.status(500)
@@ -19,8 +19,8 @@ router.get('/cart', async (req: Request, res: Response) => {//get cart for a spe
 
 router.post('/cart', validate({//add a row in cart or update quantity if product is already present for a specific user
     body: S.object()
-        .prop('userId', S.string()).required()
-        .prop('product_id', S.string()).required()
+        .prop('userId', S.number()).required()
+        .prop('productId', S.number()).required()
         .valueOf(),
     }), async (req: Request, res: Response) => {
     try {
