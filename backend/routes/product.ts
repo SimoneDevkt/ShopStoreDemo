@@ -17,6 +17,8 @@ router.get('/product', validate({
         const [rows,fields] = await promisePool.query('SELECT * FROM product');
         res.send(rows);
     } catch (error) {
+        console.log(error);
+        
         res.status(500)
         res.send({Error: 500})
     }
