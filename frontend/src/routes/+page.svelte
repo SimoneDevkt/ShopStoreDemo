@@ -135,7 +135,6 @@
     })
   }
   function removeFromCart(id) {
-    console.log(id);
     fetchJson(`${backend}/cart`, {
       method: "DELETE",
       headers: {
@@ -147,7 +146,6 @@
       })
     })
     .then(value => {
-    console.log(value);
       updateCart()
     })
   }
@@ -195,7 +193,7 @@
   {#each products as product}
     <div class="product {selectedProduct && selectedProduct.id === product.id ? 'selected' : ''}">
       <h2 on:click={() => editProduct(product.id)}>{product.id}: {product.title}</h2>
-      <p>{product.description.slice(0, 10)}...</p>
+      <p>{product.description.slice(0, 10)}{product.description.length > 10 ? '...' : ''}</p>
       <p>Prezzo: {product.price}€</p>
       {#if token}
       <button on:click={() => addToCart(product)}>Aggiungi al carrello</button>
