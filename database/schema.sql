@@ -1,5 +1,3 @@
-CREATE DATABASE shop;
-
 USE shop;
 
 CREATE TABLE product (
