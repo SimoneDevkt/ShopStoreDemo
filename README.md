@@ -1,4 +1,8 @@
 # ShopStoreDemo
-clone project
+install docker
 
-run "docker compose up"
+clone this project
+
+run ```docker compose up```
+
+open a browser and go to ```http://localhost```
