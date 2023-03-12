@@ -38,10 +38,7 @@ router.post('/product', validate({//insert a new product
         .prop('title', S.string()).required()
         .prop('description', S.string()).required()
         .prop('price', S.number()).required()
-        .valueOf(),
-    params: S.object()
-        .prop('id', S.string()).required()
-        .valueOf(),
+        .valueOf()
   }), async (req: Request, res: Response) => {
     const { title, description, price } = req.body;
     const values = [title, description, price];
@@ -81,7 +78,6 @@ router.delete('/product/:id', validate({//delete specific product by id
   }), async (req: Request, res: Response) => {
     try {
         const [rows,fields] = await promisePool.query('DELETE FROM product WHERE id = ?', req.params.id);
-        res.send(rows);
         res.send({Delete: true});
     } catch (error) {
         res.status(500)
