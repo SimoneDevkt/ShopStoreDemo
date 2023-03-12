@@ -15,9 +15,9 @@ router.post('/login', async (req: Request, res: Response) => {
         if(rows.length === 0){
             await promisePool.query('INSERT INTO users (id, name) VALUES (?, ?);', [id, name]);
         }
-        const token = jwt.sign({ userId: 1 }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: 1 }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
         res.json({ token });
-    } catch (error) {
+    } catch (error) {        
         res.status(500)
         res.send({Error: 500})
     }
