@@ -12,6 +12,36 @@ services:
       - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - "3306:3306"
+    networks:
+      net:
+        ipv4_address: 10.5.0.5
+  backend:
+    build:
+        context: ./backend
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    networks:
+      net:
+        ipv4_address: 10.5.0.6
+  frontend:
+    build:
+        context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      net:
+        ipv4_address: 10.5.0.7
+
+networks:
+  net:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
 
 volumes:
   db_data:
