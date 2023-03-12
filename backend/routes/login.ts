@@ -1,12 +1,19 @@
 import { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
 
-const router = Router();
-
+import { Validator } from 'express-json-validator-middleware';
+const { validate } = new Validator({});
+import S from 'fluent-json-schema'
 
 import promisePool from '../plugins/mysql';//for mocking
 
-router.post('/login', async (req: Request, res: Response) => {    
+const router = Router();
+
+router.post('/login', validate({
+        body: S.object().additionalProperties(false).valueOf(),
+        params: S.object().additionalProperties(false).valueOf(),
+        query: S.object().additionalProperties(false).valueOf()
+    }), async (req: Request, res: Response) => {    
     //TODO: add login logic. now we use a mock with user 1
     const id = 1
     const name = 'Jhon Doe'

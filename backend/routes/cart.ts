@@ -7,7 +7,13 @@ import S from 'fluent-json-schema'
 
 const router = Router();
 
-router.get('/cart', async (req: Request, res: Response) => {//get cart for a specific user
+router.get('/cart', validate({
+    body: S.object().additionalProperties(false)    
+        .prop('userId', S.number()).required()
+        .valueOf(),
+    params: S.object().additionalProperties(false).valueOf(),
+    query: S.object().additionalProperties(false).valueOf()
+}), async (req: Request, res: Response) => {//get cart for a specific user
     try {
         const [rows,fields] = await promisePool.query('SELECT product_id, quantity FROM cart WHERE user_id = ?', req.body.userId);
         res.send(rows);
@@ -18,10 +24,13 @@ router.get('/cart', async (req: Request, res: Response) => {//get cart for a spe
 });
 
 router.post('/cart', validate({//add a row in cart or update quantity if product is already present for a specific user
-    body: S.object()
-        .prop('userId', S.number()).required()
-        .prop('productId', S.number()).required()
-        .valueOf(),
+        body: S.object()
+            .additionalProperties(false)
+            .prop('userId', S.number()).required()
+            .prop('productId', S.number()).required()
+            .valueOf(),
+        params: S.object().additionalProperties(false).valueOf(),
+        query: S.object().additionalProperties(false).valueOf()
     }), async (req: Request, res: Response) => {
     try {
         const [rows,fields] = await promisePool.query('SELECT * FROM cart WHERE product_id = ? AND user_id = ?', [req.body.productId, req.body.userId]);
@@ -38,7 +47,14 @@ router.post('/cart', validate({//add a row in cart or update quantity if product
     }
 });
 
-router.delete('/cart', async (req: Request, res: Response) => {//delete a row in cart for a specific user
+router.delete('/cart', validate({
+        body: S.object().additionalProperties(false)
+            .prop('userId', S.number()).required()
+            .prop('productId', S.number()).required()
+            .valueOf(),
+        params: S.object().additionalProperties(false).valueOf(),
+        query: S.object().additionalProperties(false).valueOf()
+    }), async (req: Request, res: Response) => {//delete a row in cart for a specific user
     try {
         await promisePool.query('DELETE FROM cart WHERE product_id = ? AND user_id = ?', [req.body.productId, req.body.userId]);
         res.json({ delete: true });
